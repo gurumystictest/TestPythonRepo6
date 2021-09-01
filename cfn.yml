@@ -1,1 +1,26 @@
-
+AWSTemplateFormatVersion : '2010-09-09'
+Description: Sample yml template.
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: build/main
+      Runtime: go1.x
+      MemorySize: 128
+      Timeout: 10
+      Environment:
+        Variables:
+          LAMBDA_HOST: 'http://localhost:3000'
+      Events:
+        ApiRoot:
+          Type: Api
+          Properties:
+            Path: /
+            Method: ANY
+            RestApiId: !Ref ApiGatewayApi
+        ApiGreedy:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+            RestApiId: !Ref ApiGatewayApi
